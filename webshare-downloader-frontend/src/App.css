@@ -1,0 +1,132 @@
+.App {
+  text-align: center;
+  background-color: #121212;
+}
+
+html, body {
+  background-color: #121212;
+  margin: 0;
+  height: 100%;
+}
+
+h1 {
+  font-size: 70px;
+  font-weight: 600;
+  text-shadow: #FFFFFF 0 0 0.15rem;
+  margin: 0;
+  background-color: #FFFFFF;
+  color: #dbdbdb;
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+}
+
+.header-div {
+  background-color: #5E5DF0;
+  margin-bottom: 2rem;
+}
+
+.error {
+  color: red;
+}
+
+.progress-bar-component {
+  margin: 1rem 10rem;
+  border: 0.1rem solid #5E5DF0;
+}
+
+.progress-bar-component:hover { 
+  cursor: pointer;
+  background-color: #2d2d2d;
+}
+
+.progress-bar-status {
+  margin: 1rem 3rem;
+}
+
+textarea {
+  width: 65%;
+  height: 5rem;
+  background-color: #2d2d2d;
+  color: #FFFFFF;
+}
+
+/* CSS */
+.button-nice {
+  background: #5E5DF0;
+  border-radius: 999px;
+  box-shadow: #5E5DF0 0 10px 20px -10px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  opacity: 1;
+  outline: 0 solid transparent;
+  padding: 8px 18px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: fit-content;
+  word-break: break-word;
+  border: 0;
+  margin: 1rem;
+}
+
+.button-nice:hover {
+  background: #6f6fe4;
+  box-shadow: #5E5DF0 0 10px 20px -10px;
+  opacity: 0.8;
+}
+
+.button-nice-completed {
+  background: #50C878;
+  box-shadow: #50C878 0 10px 20px -10px;
+}
+
+.button-nice-completed:hover {
+  background: #6acb8b;
+  box-shadow: #6acb8b 0 10px 20px -10px;
+}
+
+.file-name {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.queue-component {
+  border: 0.1rem solid #50C878;
+}
+
+.queue-message {
+  color: #50C878;
+  font-weight: 700;
+}
+
+.loading-component {
+  display: flex;
+  justify-content: center;
+}
+
+.info-line {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0;
+}
+
+.box-border {
+  border: 0.1rem solid #5E5DF0;
+  border-radius: 0.5rem;
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  right: 10.5rem;
+}
+
+.remaining-time {
+  color: #FFFFFF;
+  font-weight: 700;
+  padding: 0 0.75rem;
+}
