@@ -5,6 +5,7 @@ import BarLoader from "react-spinners/BarLoader";
 
 type Inputs = {
   link: string,
+  aliasName: string
 };
 
 type props = {
@@ -54,6 +55,7 @@ export default function LinksForm({callback, callbackValue}: props) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <textarea {...register("link", { required: true })} placeholder="Sem zadej link"/>
         {errors.link && <><br/><span className="error">Prosím vyplň toto pole</span></>}
+        <textarea {...register("aliasName", { required: true })} placeholder="Sem zadej jméno, pod jakým chceš soubor zobrazit"/>
         <br/>
         <button
           onClick={() => (state.button = "now")}

@@ -1,49 +1,36 @@
 import { useState, useEffect } from 'react';
 import ProgressBar from "@ramonak/react-progress-bar";
 import axios from "axios";
+import { ActiveFile } from '../App';
 
 
 type props = {
-    fileName: string,
-    initProgress: number,
-    remainingTime: string,
-    updateComponent: Function
+  file: ActiveFile,
+  showFinishButton: boolean,
+  removeFileFunc: (fileName: string) => void
 }
 
-export default function NamedProgressBar({fileName, initProgress, remainingTime, updateComponent}: props) {
-    const [progress, setProgress] = useState(initProgress);
-    const [showFinishButton, setShowFinishButton] = useState(initProgress === 100);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      axios.get(`${process.env.REACT_APP_HOST_ADDRESS}/api/downloads/${fileName}`).then((res) => {
-        setProgress(res.data.progress);
-        if (res.data.progress === 100) {
-          setShowFinishButton(true);
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+export default function NamedProgressBar({file, showFinishButton, removeFileFunc}: props) {
 
   return <div className={'progress-bar-component'}>
     <div className='info-line'>
-      <p className='file-name' >{fileName}</p>
+      <p className='alias-name'>{file.aliasName}</p>
+      <p className='file-name' >{file.fileName}</p>
       <div className='box-border'>
-        <p className='remaining-time'>{remainingTime}</p>
+        <p className='remaining-time'>{file.remainingTime}</p>
       </div>
     </div>
-    <ProgressBar 
-        completed={progress}
-        animateOnRender={true}
-        bgColor="#5E5DF0"
-        baseBgColor='#969696'
-        className='progress-bar-status'
-        labelAlignment='outside'
-    />
-    {showFinishButton && <button className='button-nice button-nice-completed' onClick={() => updateComponent(fileName)}>Dokončit</button>}
+    {file.isQueued && file.progress === 0 && <p className='alias-name'>Čeká ve frontě</p> }¨
+    {(!file.isQueued || file.progress !== 0) &&
+      <ProgressBar 
+          completed={file.progress}
+          animateOnRender={true}
+          bgColor="#5E5DF0"
+          baseBgColor='#969696'
+          className='progress-bar-status'
+          labelAlignment='outside'
+      />
+    }
+    {showFinishButton && <button className='button-nice button-nice-completed' onClick={() => removeFileFunc(file.fileName)}>Dokončit</button>}
   </div>;
 }

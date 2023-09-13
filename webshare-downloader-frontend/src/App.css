@@ -93,6 +93,12 @@ textarea {
 
 .file-name {
   color: #FFFFFF;
+  font-size: small;
+  font-weight: 300;
+}
+
+.alias-name {
+  color: #FFFFFF;
   font-weight: 700;
 }
 

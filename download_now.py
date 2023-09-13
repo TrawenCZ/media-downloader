@@ -2,9 +2,8 @@ from sys import argv
 import subprocess
 import os
 
-default_outputdir = '/media/pi'
-testing_outputdir = './download_tests'
-limit_rate = "--limit-rate=100k"
+default_outputdir = os.environ["OUTPUT_PATH"] if int(os.environ["TEST_ENV"]) == 1 else './download_tests'
+limit_rate = f"--limit-rate={os.environ['LIMIT_SPEED_RATE']}"
 
 
 def exec_download(link):
