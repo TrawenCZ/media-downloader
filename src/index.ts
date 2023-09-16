@@ -12,13 +12,16 @@ import { mainRouter } from "./routes/mainRouter";
 import { refreshStatuses } from "./utils/helpers";
 
 
+
 dotenv.config();
 export const IPADDRESS = ip.address();
 export const PORT = process.env?.PORT || 3000;
+export const PYTHON_CMD = process.env?.PYTHON_CMD || "python";
 
-const app = initializeApp();
 
 AppDataSource.initialize().then(async () => {
+
+  const app = initializeApp();
 
   app.use("/api", mainRouter);
 
@@ -33,6 +36,8 @@ AppDataSource.initialize().then(async () => {
       )
     );
   }); 
+
+  app.use(express.static(path.join(__dirname, '..', 'webshare-downloader-frontend', 'build')));
 
   app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running at ${PORT}`);

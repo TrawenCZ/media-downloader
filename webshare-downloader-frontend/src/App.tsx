@@ -3,8 +3,10 @@ import './App.css';
 import LinksForm from './components/LinksForm';
 import NamedProgressBar from './components/NamedProgressBar';
 import axios from "axios";
+import { FaCopyright } from 'react-icons/fa';
 
-export type ActiveFile = {
+
+export type DownloadState = {
   id: string,
   fileName: string,
   aliasName: string,
@@ -13,76 +15,38 @@ export type ActiveFile = {
   remainingTime: string
 }
 
-export type FileHook = {
-  id: string,
-  fileHook: ActiveFile,
-  setFile: React.Dispatch<React.SetStateAction<ActiveFile>>,
-  showFinishButtonHook: boolean,
-  setShowFinishButton: React.Dispatch<React.SetStateAction<boolean>>
-}
-
 
 
 function App() {
   const [shouldRender, setShouldRender] = React.useState(false);
   const [triggerUseEffect, setTriggerUseEffect] = React.useState(false);
-  // const [fileHooks, setFileHooks] = useState(new Array<FileHook>());
-  const [progressBarsHooks, setProgressBarsHooks] = useState(new Array<FileHook>());
-  var fileHooksIds: string[] = [];
+  const [downloadStates, setDownloadStates] = useState(new Array<DownloadState>());
 
-
-  const useFetch = (url: string) => {
-    const [data, setData] = useState(null);
-  
-    useEffect(() => {
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => setData(data));
-    }, [url]);
-  
-    return [data];
-  };
-
-
-  function removeFile(fileToRemove: string) {
-    axios.delete(`/api/downloads/${fileToRemove}`).then((res) => {
-      setProgressBarsHooks(progressBarsHooks.filter((progressBarHook) => progressBarHook.fileHook.fileName !== fileToRemove));
+  function removeFile(fileToRemoveId: string) {
+    axios.delete(`/api/downloads/${fileToRemoveId}`).then((res) => {
+      setDownloadStates(downloadStates.filter((downloadState) => downloadState.id !== fileToRemoveId));
     }).catch((err) => {
-      alert('Něco se pokazilo, zkuste to prosím znovu.');
+      alert("Něco se pokazilo, zkuste to prosím znovu.\n\n" + err.response.data);
       fetchData();
       console.log(err);
     });
   }
 
   async function fetchData() {
-    const newActiveFiles: ActiveFile[] = (await axios.get(`/api/downloads`)).data;
+    const res = await axios.get(`/api/downloads`);
 
-    const newActiveFilesIds = newActiveFiles.map((file) => file.id);
-    var progressBarsHooksCopy = [...progressBarsHooks];
-    progressBarsHooksCopy = progressBarsHooks.filter((fileHook) => { newActiveFilesIds.includes(fileHook.id) })
+    if (res.status >= 300) {
+      alert("Něco se pokazilo, zkuste to prosím znovu.\n\n" + res.data);
+      return;
+    }
 
-    newActiveFiles.forEach((file) => {
-      if (fileHooksIds.includes(file.id)) {
-        const existingEntry = progressBarsHooksCopy.find((hook) => hook.id === file.id)!;
-        existingEntry.setFile(file);
-        existingEntry.setShowFinishButton(file.progress === 100);
-      } else {
-        const [ newFileHook, setNewFileHook ] = useState(file);
-        const [ newShowFinishButton, setNewShowFinishButton ] = useState(file.progress === 100);
-        progressBarsHooksCopy.push({ id: file.id, fileHook: newFileHook, setFile: setNewFileHook, showFinishButtonHook: newShowFinishButton, setShowFinishButton: setNewShowFinishButton });
-      }
-    });
-
-    fileHooksIds = progressBarsHooksCopy.map((fileHook) => fileHook.id);
-
-    setProgressBarsHooks(progressBarsHooksCopy);
+    const newDownloadStates: DownloadState[] = res.data;
+    setDownloadStates(newDownloadStates);
 
     setShouldRender(true);
   }
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  fetchData();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -95,15 +59,18 @@ function App() {
   return (
     <div className="App">
       <div className='header-div'>
-      <h1>WebShare Downloader by Dominik and Adam</h1>
+      <h1>Video Downloader</h1>
       </div>
-      <LinksForm callbackValue={triggerUseEffect} callback={setTriggerUseEffect}/>
+      <LinksForm forcedFetch={fetchData} />
       <div>
-        {shouldRender && progressBarsHooks.map((progressBarHook) => {
-          return <NamedProgressBar key={progressBarHook.fileHook.id} file={progressBarHook.fileHook} showFinishButton={progressBarHook.showFinishButtonHook} removeFileFunc={removeFile} />
+        {shouldRender && downloadStates.map((downloadState) => {
+          return <NamedProgressBar key={downloadState.id} downloadState={downloadState} removeFileFunc={removeFile} />
         })
         }
       </div>
+      <footer className='footer'>
+          <FaCopyright className='copyright-icon'/> Trawen Solutions 2023
+      </footer>
     </div>
   );
 }

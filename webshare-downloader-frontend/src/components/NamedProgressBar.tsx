@@ -1,29 +1,34 @@
-import { useState, useEffect } from 'react';
 import ProgressBar from "@ramonak/react-progress-bar";
-import axios from "axios";
-import { ActiveFile } from '../App';
+import { DownloadState } from '../App';
+import { FaClock, FaCheckCircle } from 'react-icons/fa';
 
 
 type props = {
-  file: ActiveFile,
-  showFinishButton: boolean,
-  removeFileFunc: (fileName: string) => void
+  downloadState: DownloadState,
+  removeFileFunc: (fileId: string) => void
 }
 
-export default function NamedProgressBar({file, showFinishButton, removeFileFunc}: props) {
+export default function NamedProgressBar({downloadState: {id, fileName, aliasName, progress, isQueued, remainingTime}, removeFileFunc}: props) {
+  console.log(id, fileName, aliasName, progress, isQueued, remainingTime);
 
   return <div className={'progress-bar-component'}>
-    <div className='info-line'>
-      <p className='alias-name'>{file.aliasName}</p>
-      <p className='file-name' >{file.fileName}</p>
-      <div className='box-border'>
-        <p className='remaining-time'>{file.remainingTime}</p>
+    {!isQueued &&
+      <div className={`box-border${progress === 100 ? " completed" : ""}`}>
+        {progress === 100 && <FaCheckCircle className='check-icon'/>}
+        <p className='remaining-time'>{remainingTime}</p>
       </div>
+    }
+    <div className='info-column'>
+
+      <p className='alias-name'>{aliasName ? aliasName : fileName}</p>
+      {aliasName &&
+        <p className='file-name' >{"\n"}{aliasName ? fileName : ""}</p>
+      }
     </div>
-    {file.isQueued && file.progress === 0 && <p className='alias-name'>Čeká ve frontě</p> }¨
-    {(!file.isQueued || file.progress !== 0) &&
+    {isQueued && progress === 0 && <p className='queue-info'>Čeká ve frontě <FaClock /> </p> }
+    {(!isQueued || progress !== 0) &&
       <ProgressBar 
-          completed={file.progress}
+          completed={progress}
           animateOnRender={true}
           bgColor="#5E5DF0"
           baseBgColor='#969696'
@@ -31,6 +36,6 @@ export default function NamedProgressBar({file, showFinishButton, removeFileFunc
           labelAlignment='outside'
       />
     }
-    {showFinishButton && <button className='button-nice button-nice-completed' onClick={() => removeFileFunc(file.fileName)}>Dokončit</button>}
+    {(progress === 100) && <button className='button-nice button-nice-completed' onClick={() => removeFileFunc(id)}>Dokončit</button>}
   </div>;
 }

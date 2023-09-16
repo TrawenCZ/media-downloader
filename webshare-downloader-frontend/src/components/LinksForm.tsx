@@ -9,13 +9,11 @@ type Inputs = {
 };
 
 type props = {
-  callback: Function,
-  callbackValue: boolean
+  forcedFetch: () => Promise<void>
 }
 
-export default function LinksForm({callback, callbackValue}: props) {
+export default function LinksForm({forcedFetch}: props) {
     const [loading, setLoading] = useState(false);
-    const [showQueueMessage, setShowQueueMessage] = useState(false);
 
     const state = {
         button: "now"
@@ -31,21 +29,17 @@ export default function LinksForm({callback, callbackValue}: props) {
         } else if (state.button === "queue") {
             apiLink = "/api/queue";
         }
-        axios.post(`${process.env.REACT_APP_HOST_ADDRESS}${apiLink}`,
+        axios.post(apiLink,
         {
-            link: data.link
+            link: data.link,
+            aliasName: data.aliasName
         }).then((res) => {
             console.log(res);
             setLoading(false);
-            if (apiLink === "/api/now") {
-              callbackValue = !callbackValue;
-              callback(callbackValue);
-          } else {
-            setShowQueueMessage(true);
-          }
+            forcedFetch();
         }).catch((err) => {
             setLoading(false);
-            alert("Něco se pokazilo, zkuste to prosím znovu");
+            alert("Něco se pokazilo, zkuste to prosím znovu.\n\n" + err.response.data);
             console.log(err);
         });
         reset();
@@ -55,7 +49,7 @@ export default function LinksForm({callback, callbackValue}: props) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <textarea {...register("link", { required: true })} placeholder="Sem zadej link"/>
         {errors.link && <><br/><span className="error">Prosím vyplň toto pole</span></>}
-        <textarea {...register("aliasName", { required: true })} placeholder="Sem zadej jméno, pod jakým chceš soubor zobrazit"/>
+        <input {...register("aliasName", { required: true })} placeholder="Sem zadej jméno, pod jakým chceš soubor uložit (a zobrazit)"/>
         <br/>
         <button
           onClick={() => (state.button = "now")}
@@ -79,12 +73,6 @@ export default function LinksForm({callback, callbackValue}: props) {
       <div className="loading-component">
         <BarLoader className="loading-component" cssOverride={{display: "flex"}} color="#5E5DF0" loading={loading} height={8} width={150} />
       </div>
-      {showQueueMessage && (<>
-        <div className="progress-bar-component queue-component">
-        <p className="queue-message">Přidáno do fronty</p>
-        <button className="button-nice button-nice-completed" onClick={() => setShowQueueMessage(false)}>OK</button>
-      </div>
-      </>)}
       </>
     );
 }

@@ -1,31 +1,34 @@
 import { Router } from 'express';
-import { loadProgressAndRemainingTime, refreshStatuses } from '../utils/helpers';
+import { checkPayload, loadProgressAndRemainingTime, refreshStatuses } from '../utils/helpers';
 import { AppDataSource } from '../data-source';
 import { DownloadEntry } from '../entity/DownloadEntry';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import path from 'path';
 import { execSync } from 'child_process';
+import { PYTHON_CMD } from '..';
 
 
 export const mainRouter = Router();
 const downloadRepository = AppDataSource.getRepository(DownloadEntry);
 
 
-mainRouter.get("/api/downloads", refreshStatuses, (req, res) => {
-    res.send(downloadRepository.find());
+mainRouter.get("/downloads", refreshStatuses, async (req, res) => {
+    res.send(await downloadRepository.find());
 });
 
 
-mainRouter.post("/api/now", async (req, res) => {
-    const link = req.body.link;
+mainRouter.post("/now", refreshStatuses, async (req, res) => {
+    const link: string = req.body.link;
     const fileOriginalName = link.split("/").pop();
     const aliasName: string = req.body.aliasName || fileOriginalName;
 
-    if (link.split().length > 1) {
-      res.status(400).send("Only one link is allowed.");
+    const {valid, err_msg} = checkPayload(link, aliasName);
+    if (!valid) {
+      res.status(400).send(err_msg);
       return;
     }
+
 
     if (await downloadRepository.findOneBy({fileName: fileOriginalName})) { 
       res.status(400).send("File is already active.");
@@ -33,46 +36,65 @@ mainRouter.post("/api/now", async (req, res) => {
     }
 
     try {
-      execSync("python download_now.py " + link, { stdio: "inherit" });
-      const newEntry = await downloadRepository.create({ fileName: fileOriginalName, aliasName: aliasName});
-      downloadRepository.insert(newEntry)
+
+      execSync(`${PYTHON_CMD} download_now.py "${link}" "${aliasName}"`, { stdio: "inherit" })
+
+      await downloadRepository.insert({ fileName: fileOriginalName, aliasName: aliasName});
+
     } catch (error) {
       res
         .status(500)
-        .send("Error occurred while downloading file from link '" + link + "'.");
+        .send("Internal error occurred while trying to download file '" + aliasName + "'.");
       return;
     }
     res.send("Successfuly downloading file from link '" + link + "'.");
 });
 
 
-mainRouter.post("/api/queue", async (req, res) => {
+mainRouter.post("/queue", refreshStatuses, async (req, res) => {
     const link = req.body.link;
     const fileOriginalName = link.split("/").pop();
     const aliasName = req.body.aliasName || fileOriginalName;
-    if (link.split().length > 1) {
-      res.status(400).send("Only one link is allowed.");
+
+    const {valid, err_msg} = checkPayload(link, aliasName);
+    if (!valid) {
+      res.status(400).send(err_msg);
       return;
     }
+
     try {
-      execSync("python download_in_queue.py " + link, { stdio: "inherit" });
-      const newEntry = await downloadRepository.create({ fileName: fileOriginalName, aliasName: aliasName, isQueued: true});
-      downloadRepository.insert(newEntry)
+      
+      execSync(`${PYTHON_CMD} download_in_queue.py "${link}" "${aliasName}"`, { stdio: "inherit" })
+
+      await downloadRepository.insert({ fileName: fileOriginalName, aliasName: aliasName, isQueued: true});
+
     } catch (error) {
       res
         .status(500)
-        .send("Error occurred while putting '" + aliasName + "' into queue.");
+        .send("Internal error occurred while trying to put '" + aliasName + "' into queue (it may be invalid link).");
       return;
     }
-    res.send("Successfuly added to queue '" + aliasName + "'.");
+
+    res.send(`Successfuly added "${aliasName}" to queue.`);
 });
 
 
-mainRouter.delete("/api/downloads/:fileName", async (req, res) => {
-    const fileName = req.params.fileName;
-    await downloadRepository.delete({fileName: fileName});
+mainRouter.delete("/downloads/:fileId", refreshStatuses, async (req, res) => {
+    const fileId = req.params.fileId;
+    const fileToDelete = await downloadRepository.findOneBy({id: fileId});
+
+    if (!fileToDelete) {
+      res.status(400).send(`File with ID "${fileId}" was not found.`);
+      return;
+    }
+
+    if (!await downloadRepository.delete({id: fileId})) {
+      res.status(500).send("Error occurred while deleting file.");
+      return;
+    }
+
     fs.unlinkSync(
-      path.join(__dirname, "storage", "progressLogs", `${fileName}.log`)
+      path.join(__dirname, "storage", "progressLogs", `${fileToDelete.fileName}.log`)
     );
 
     res.send("File deleted successfully");
