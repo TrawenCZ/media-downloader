@@ -1,6 +1,7 @@
 import ProgressBar from "@ramonak/react-progress-bar";
 import { DownloadState } from '../App';
-import { FaClock, FaCheckCircle } from 'react-icons/fa';
+import { FaClock } from 'react-icons/fa';
+import { useState } from "react";
 
 
 type props = {
@@ -9,12 +10,14 @@ type props = {
 }
 
 export default function NamedProgressBar({downloadState: {id, fileName, aliasName, progress, isQueued, remainingTime}, removeFileFunc}: props) {
-  console.log(id, fileName, aliasName, progress, isQueued, remainingTime);
 
-  return <div className={'progress-bar-component'}>
+  const is_completed = progress === 100;
+
+  const [showConfirmation, setShowConfirmation] = useState(false); 
+  
+  return <div className={`progress-bar-component${is_completed ? " pb-completed" : ""}`}>
     {!isQueued &&
-      <div className={`box-border${progress === 100 ? " completed" : ""}`}>
-        {progress === 100 && <FaCheckCircle className='check-icon'/>}
+      <div className={`box-border${is_completed ? " completed" : ""}`}>
         <p className='remaining-time'>{remainingTime}</p>
       </div>
     }
@@ -30,12 +33,22 @@ export default function NamedProgressBar({downloadState: {id, fileName, aliasNam
       <ProgressBar 
           completed={progress}
           animateOnRender={true}
-          bgColor="#5E5DF0"
+          bgColor={is_completed ? "#50C878" : "#5E5DF0"}
           baseBgColor='#969696'
           className='progress-bar-status'
           labelAlignment='outside'
       />
     }
-    {(progress === 100) && <button className='button-nice button-nice-completed' onClick={() => removeFileFunc(id)}>Dokončit</button>}
+    {is_completed && <button className='button-nice button-nice-completed' onClick={() => removeFileFunc(id)}>Dokončit</button>}
+    {!is_completed && <button className='button-nice button-nice-cancel' onClick={() => setShowConfirmation(!showConfirmation)}>Zrušit</button>}
+    {!is_completed && showConfirmation && 
+      <div className='confirmation-box'>
+          <p className='confirmation-text'>Opravdu chceš zrušit stahování souboru "{aliasName ? aliasName : fileName}"?</p>
+          <div className="button-line">
+            <button className='button-nice button-nice-completed' onClick={() => setShowConfirmation(!showConfirmation)}>Ne</button>
+            <button className='button-nice button-nice-cancel' onClick={() => removeFileFunc(id)}>Ano</button>
+          </div>
+      </div>
+    }
   </div>;
 }

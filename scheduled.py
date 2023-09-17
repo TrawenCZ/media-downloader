@@ -1,28 +1,11 @@
-from sys import argv
-import subprocess
-from time import sleep
+import requests
 import os
 
+port = int(os.environ["PORT"]) if os.getenv("PORT") is not None else 3000
 
 def exec_scheduled_download():
-    if not os.path.exists("/tmp/links.txt"):
-        return
-    file = open("/tmp/links.txt", "r")
-    for item in os.scandir('/media/pi'):
-        if item.is_dir():
-            for link in file.readlines():
-                file_name = link.split('/')[-1]
-                log_file_name = os.getcwd() + "/src/storage/progressLogs/" + file_name + '.log'
-
-                # check if file_name has suffix
-                if len(file_name.split(".")) == 1 or len(file_name.split(".")[-1]) > 4:
-                    file_name += '.mkv'
-                subprocess.Popen(f'wget -o "{log_file_name}" -O "{file_name}" "{link}"', shell=True, cwd=item.path)
-            break
-    sleep(5)
-    file.close()
-    os.remove("/tmp/links.txt")
-
+    r = requests.post(f'http://localhost:{port}/api/downloads/queue-start')
+    print(r.text)
 
 if __name__ == '__main__':
     exec_scheduled_download()

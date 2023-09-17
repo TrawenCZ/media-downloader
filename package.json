@@ -4,7 +4,7 @@
    "description": "",
    "main": "src/server.js",
    "scripts": {
-      "start": "cd webshare-downloader-frontend; npm run build; cd ..; ts-node src/index.ts",
+      "start": "cd webshare-downloader-frontend && npm run build && cd .. && ts-node src/index.ts",
       "qstart": "ts-node src/index.ts",
       "test": "echo \"Error: no test specified\" && exit 1",
       "dev": "nodemon src/index.ts",

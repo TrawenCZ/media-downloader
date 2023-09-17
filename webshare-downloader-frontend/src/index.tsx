@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { FaCopyright } from 'react-icons/fa';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -10,6 +11,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <App />
+    <footer className='footer'>
+            <FaCopyright className='copyright-icon'/> Trawen Solutions 2023
+    </footer>
   </React.StrictMode>
 );
 

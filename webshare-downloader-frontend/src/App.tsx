@@ -5,7 +5,6 @@ import NamedProgressBar from './components/NamedProgressBar';
 import axios from "axios";
 import { FaCopyright } from 'react-icons/fa';
 
-
 export type DownloadState = {
   id: string,
   fileName: string,
@@ -19,7 +18,6 @@ export type DownloadState = {
 
 function App() {
   const [shouldRender, setShouldRender] = React.useState(false);
-  const [triggerUseEffect, setTriggerUseEffect] = React.useState(false);
   const [downloadStates, setDownloadStates] = useState(new Array<DownloadState>());
 
   function removeFile(fileToRemoveId: string) {
@@ -32,6 +30,11 @@ function App() {
     });
   }
 
+  async function fetchDataWithCallback(callback: React.Dispatch<React.SetStateAction<boolean>>) {
+    await fetchData();
+    callback(false);
+  }
+
   async function fetchData() {
     const res = await axios.get(`/api/downloads`);
 
@@ -41,12 +44,14 @@ function App() {
     }
 
     const newDownloadStates: DownloadState[] = res.data;
-    setDownloadStates(newDownloadStates);
+    setDownloadStates(newDownloadStates.sort((a, b) => b.progress - a.progress));
 
     setShouldRender(true);
   }
 
-  fetchData();
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -57,21 +62,18 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <div className='header-div'>
-      <h1>Video Downloader</h1>
+      <div className="App">
+        <div className='header-div'>
+        <h1>Video Downloader</h1>
+        </div>
+        <LinksForm forcedFetch={fetchDataWithCallback} />
+        <div>
+          {shouldRender && downloadStates.map((downloadState) => {
+            return <NamedProgressBar key={downloadState.id} downloadState={downloadState} removeFileFunc={removeFile} />
+          })
+          }
+        </div>
       </div>
-      <LinksForm forcedFetch={fetchData} />
-      <div>
-        {shouldRender && downloadStates.map((downloadState) => {
-          return <NamedProgressBar key={downloadState.id} downloadState={downloadState} removeFileFunc={removeFile} />
-        })
-        }
-      </div>
-      <footer className='footer'>
-          <FaCopyright className='copyright-icon'/> Trawen Solutions 2023
-      </footer>
-    </div>
   );
 }
 

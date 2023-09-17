@@ -3,18 +3,10 @@ import path from "path";
 import ip from "ip";
 import express from "express";
 import cors from "cors";
-import { IPADDRESS, PORT } from "..";
 
 
 
 export const initializeApp = () => {
-    
-  /*
-    fs.writeFileSync(
-        path.join(__dirname, "..", "webshare-downloader-frontend", ".env"),
-        "REACT_APP_HOST_ADDRESS=" + "http://" + IPADDRESS + ":" + PORT
-    );
-  */	
     
     const app = express();
     app.use(express.json());

@@ -3,13 +3,16 @@ import path from "path";
 import fs from "fs";
 import { AppDataSource } from "../data-source";
 import { DownloadEntry } from "../entity/DownloadEntry";
+import { LOGS_DIR_PATH, QUEUE_FILE_PATH } from "..";
+import { FindOperator, FindOperators, In, Not } from "typeorm";
 
 
 const downloadRepository = AppDataSource.getRepository(DownloadEntry);
 
 
-export const refreshStatuses = async (req, res, next) => {
-    var activeFileNames: Partial<DownloadEntry>[] = [];
+export const refreshStatuses = async () => {
+    const activeDownloadEntries: Partial<DownloadEntry>[] = [];
+    const activeDownloadEntriesWithAlias: Partial<DownloadEntry>[] = [];
 
     for (const file of fs.readdirSync(
       path.join(__dirname, "..", "storage", "progressLogs")
@@ -20,17 +23,22 @@ export const refreshStatuses = async (req, res, next) => {
       if (progressAndRemainingTime.progress === -1) continue;
 
       const fileNoExt = file.replace(".log", "");
-      activeFileNames.push({fileName: fileNoExt, progress: progressAndRemainingTime.progress, remainingTime: progressAndRemainingTime.remainingTime});
+      activeDownloadEntries.push({fileName: fileNoExt, progress: progressAndRemainingTime.progress, remainingTime: progressAndRemainingTime.remainingTime, isQueued: false});
 
     }
 
-    if (activeFileNames.length > 0) {
-        await downloadRepository.upsert(activeFileNames, ["fileName"]);
+    if (fs.existsSync(QUEUE_FILE_PATH)) {
+      for (const queueLine of fs.readFileSync(QUEUE_FILE_PATH, "utf-8").split("\n").filter(x => x !== "")) {
+        const splittedLine = queueLine.split('"');
+        const fileNoExt = splittedLine[0].split("/").pop();
+        const aliasName = splittedLine[1];
+        activeDownloadEntries.push({fileName: fileNoExt, aliasName: aliasName, isQueued: true});
+      }
     }
 
-    //await downloadRepository.createQueryBuilder().delete().where("fileName NOT IN (:...fileNames) AND ( isQueued = 0 OR createdAt < DATETIME(DATE(), '-1 day'))", {fileNames: activeFileNames.map((file) => file.fileName)}).execute();
+    await downloadRepository.upsert(activeDownloadEntries, ["fileName"]);
 
-    next()
+    await downloadRepository.delete({fileName: Not(In(activeDownloadEntries.map(e => e.fileName)))});
 }
 
 
@@ -61,17 +69,18 @@ export const loadProgressAndRemainingTime = (fileName) => {
 
 
 export const checkPayload = (link, aliasName) => {
-    if (link.split(" ").length > 1) {
-      return {valid: false, err_msg: "Only one link is allowed."};
-    }
-  
-    if (link.includes(`"`)) {
-      return {valid: false, err_msg: "Link cannot contain quotation marks."};
+    if (link.includes(`"`) || aliasName.includes(" ")) {
+      return {valid: false, err_msg: "Link cannot contain quotation marks and spaces."};
     }
 
-    if (aliasName.includes(`"`) || aliasName.includes(`/`)) {
-      return {valid: false, err_msg: "Alias name cannot contain quotation marks and slashes."};
+    if (aliasName.includes(`"`) || aliasName.includes(`/`) || aliasName.includes(" ")) {
+      return {valid: false, err_msg: "Alias name cannot contain quotation marks, slashes andn spaces."};
     }
   
     return {valid: true, err_msg: ""};
+}
+
+
+export const syntetizeLogPath = (fileName) => {
+    return path.join(LOGS_DIR_PATH, `${fileName}.log`);
 }

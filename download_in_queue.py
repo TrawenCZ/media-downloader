@@ -2,7 +2,7 @@ import subprocess
 from sys import argv
 import os
 
-queue_file_path = os.environ["QUEUE_FILE_PATH"] if os.environ["DEV_ENV"] != "dev" else os.environ["QUEUE_FILE_PATH_TEST"]
+queue_file_path = os.environ["QUEUE_FILE_PATH"] if os.environ["NODE_ENV"] != "dev" else os.environ["QUEUE_FILE_PATH_TEST"]
 
 def add_to_queue(link, alias_name):
     if len(link) == 0:
@@ -12,7 +12,7 @@ def add_to_queue(link, alias_name):
         exit(-1)
 
     link_file = open(queue_file_path, "a")
-    link_file.write(link + " " + alias_name + '\n')
+    link_file.write(link + '"' + alias_name + '\n')
     exit(0)
 
 

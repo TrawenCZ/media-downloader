@@ -2,7 +2,7 @@ from sys import argv
 import subprocess
 import os
 
-default_outputdir = os.environ["FILE_OUTPUT_PATH"] if os.environ["DEV_ENV"] != "dev" else os.environ["FILE_OUTPUT_PATH_TEST"]
+default_outputdir = os.environ["FILE_OUTPUT_PATH"] if os.environ["NODE_ENV"] != "dev" else os.environ["FILE_OUTPUT_PATH_TEST"]
 limit_rate = f"--limit-rate={os.environ['LIMIT_SPEED_RATE']}"
 
 
