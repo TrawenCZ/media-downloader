@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import { checkPayload,   syntetizeLogPath } from '../utils/helpers';
+import { checkPayload, syntetizeLogPath } from '../utils/helpers';
 import { AppDataSource } from '../data-source';
 import { DownloadEntry } from '../entity/DownloadEntry';
 import fs from 'fs';
 import path from 'path';
 import { exec, execSync } from 'child_process';
-import { FILE_OUTPUT_PATH, PYTHON_CMD, QUEUE_FILE_PATH, SPEEL_LIMIT_RATE } from '..';
-import { exit } from 'process';
+import { FILE_OUTPUT_PATH, QUEUE_FILE_PATH, SPEEL_LIMIT_RATE } from '..';
 
 
 export const mainRouter = Router();

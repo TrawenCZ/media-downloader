@@ -3,7 +3,6 @@ import './App.css';
 import LinksForm from './components/LinksForm';
 import NamedProgressBar from './components/NamedProgressBar';
 import axios from "axios";
-import { FaCopyright } from 'react-icons/fa';
 
 export type DownloadState = {
   id: string,

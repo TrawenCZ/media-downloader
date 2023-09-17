@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <App />
     <footer className='footer'>
-            <FaCopyright className='copyright-icon'/> Trawen Solutions 2023
+      <FaCopyright className='copyright-icon'/> Trawen Solutions 2023
     </footer>
   </React.StrictMode>
 );
