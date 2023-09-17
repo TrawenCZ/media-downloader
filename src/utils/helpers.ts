@@ -11,10 +11,8 @@ const downloadRepository = AppDataSource.getRepository(DownloadEntry);
 export const refreshStatuses = async () => {
   const activeDownloadEntries: Partial<DownloadEntry>[] = [];
 
-  for (const file of fs.readdirSync(
-    path.join(__dirname, "..", "storage", "progressLogs")
-  )) {
-    if (file === ".gitkeep") continue;
+  for (const file of fs.readdirSync(LOGS_DIR_PATH)) {
+    if (file === ".gitkeep" || !file.endsWith(".log")) continue;
 
     const progressAndRemainingTime = loadProgressAndRemainingTime(file);
     if (progressAndRemainingTime.progress === -1) continue;
