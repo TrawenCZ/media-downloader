@@ -1,33 +1,33 @@
 {
-   "name": "dominik-downloader",
-   "version": "1.0.0",
-   "description": "",
-   "main": "src/server.js",
-   "scripts": {
-      "start": "cd webshare-downloader-frontend && npm run build && cd .. && ts-node src/index.ts",
-      "fbuild": "cd webshare-downloader-frontend && npm run build",
-      "qstart": "ts-node src/index.ts",
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "nodemon src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
-   },
-   "keywords": [],
-   "author": "",
-   "license": "ISC",
-   "dependencies": {
-      "@types/express": "^4.17.17",
-      "cors": "^2.8.5",
-      "dotenv": "^16.0.3",
-      "express": "^4.18.2",
-      "ip": "^1.1.8",
-      "reflect-metadata": "^0.1.13",
-      "sqlite3": "^5.0.2",
-      "typeorm": "0.3.17"
-   },
-   "devDependencies": {
-      "@types/node": "^16.11.10",
-      "nodemon": "^3.0.1",
-      "ts-node": "10.7.0",
-      "typescript": "4.5.2"
-   }
+  "name": "dominik-downloader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "cd webshare-downloader-frontend && npm run build && cd .. && ts-node src/index.ts",
+    "fbuild": "cd webshare-downloader-frontend && npm run build",
+    "qstart": "ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts",
+    "typeorm": "typeorm-ts-node-commonjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.17",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "ip": "^1.1.8",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.2",
+    "typeorm": "0.3.17"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.10",
+    "nodemon": "^3.0.1",
+    "ts-node": "10.7.0",
+    "typescript": "4.5.2"
+  }
 }

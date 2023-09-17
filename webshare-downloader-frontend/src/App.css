@@ -17,13 +17,16 @@ html, body {
 h1 {
   font-size: 70px;
   font-weight: 600;
-  text-shadow: #FFFFFF 0 0 0.15rem;
+  text-shadow: #ffffff 0 0 0.15rem;
   margin: 0;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   color: #dbdbdb;
   background-clip: text;
   -webkit-background-clip: text;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-family: Inter, Helvetica, "Apple Color Emoji", "Segoe UI Emoji",
+    NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji",
+    EmojiSymbols, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", sans-serif;
 }
 
 form {
@@ -35,7 +38,7 @@ form {
 }
 
 .header-div {
-  background-color: #5E5DF0;
+  background-color: #5e5df0;
   margin-bottom: 2rem;
 }
 
@@ -45,7 +48,7 @@ form {
 
 .progress-bar-component {
   margin: 1rem 10rem;
-  border: 0.1rem solid #5E5DF0;
+  border: 0.1rem solid #5e5df0;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -53,10 +56,10 @@ form {
 }
 
 .pb-completed {
-  border: 0.1rem solid #50C878;
+  border: 0.1rem solid #50c878;
 }
 
-.progress-bar-component:hover { 
+.progress-bar-component:hover {
   cursor: pointer;
   background-color: #2d2d2d;
 }
@@ -70,23 +73,22 @@ textarea {
   width: 100%;
   background-color: #2d2d2d;
   height: 6rem;
-  color: #FFFFFF;
+  color: #ffffff;
   border: transparent;
   min-height: 3rem;
 }
 
-
-
-
-/* CSS */
 .button-nice {
-  background: #5E5DF0;
+  background: #5e5df0;
   border-radius: 999px;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
+  box-shadow: #5e5df0 0 10px 20px -10px;
   box-sizing: border-box;
-  color: #FFFFFF;
+  color: #ffffff;
   cursor: pointer;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  font-family: Inter, Helvetica, "Apple Color Emoji", "Segoe UI Emoji",
+    NotoColorEmoji, "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji",
+    EmojiSymbols, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", sans-serif;
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
@@ -104,20 +106,19 @@ textarea {
 
 .button-nice:hover {
   background: #6f6fe4;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
+  box-shadow: #5e5df0 0 10px 20px -10px;
   opacity: 0.8;
 }
 
 .button-nice-completed {
-  background: #50C878;
-  box-shadow: #50C878 0 10px 20px -10px;
+  background: #50c878;
+  box-shadow: #50c878 0 10px 20px -10px;
 }
 
 .button-nice-completed:hover {
   background: #6acb8b;
   box-shadow: #6acb8b 0 10px 20px -10px;
 }
-
 
 .button-nice-cancel {
   background: #ff4848;
@@ -130,25 +131,25 @@ textarea {
 }
 
 .file-name {
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: small;
   font-weight: 300;
   margin: 1.5rem 5rem;
 }
 
 .alias-name {
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 700;
   font-size: xx-large;
   margin: 1rem 4rem 0 4rem;
 }
 
 .queue-component {
-  border: 0.1rem solid #50C878;
+  border: 0.1rem solid #50c878;
 }
 
 .queue-message {
-  color: #50C878;
+  color: #50c878;
   font-weight: 700;
 }
 
@@ -178,9 +179,9 @@ textarea {
 }
 
 .box-border {
-  border-bottom: 0.1rem solid #5E5DF0;
-  border-left: 0.1rem solid #5E5DF0;
-  border-right: 0.1rem solid #5E5DF0;
+  border-bottom: 0.1rem solid #5e5df0;
+  border-left: 0.1rem solid #5e5df0;
+  border-right: 0.1rem solid #5e5df0;
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
 
@@ -189,13 +190,13 @@ textarea {
 }
 
 .completed {
-  border-bottom: 0.1rem solid #50C878;
-  border-left: 0.1rem solid #50C878;
-  border-right: 0.1rem solid #50C878;
+  border-bottom: 0.1rem solid #50c878;
+  border-left: 0.1rem solid #50c878;
+  border-right: 0.1rem solid #50c878;
 }
 
 .remaining-time {
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 700;
   padding: 0 0.75rem;
 }
@@ -204,8 +205,8 @@ textarea {
   bottom: 0;
   width: 100%;
   height: 2.5rem;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  background-color: #5E5DF0;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  background-color: #5e5df0;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -217,7 +218,7 @@ textarea {
 }
 
 .check-icon {
-  color: #50C878;
+  color: #50c878;
   size: 12rem;
   margin: 0.5rem 0 0 0rem;
   position: absolute;
@@ -225,7 +226,7 @@ textarea {
 }
 
 .queue-info {
-  color: #50C878;
+  color: #50c878;
   margin: 0.5rem 5rem 0.8rem 5rem;
   font-weight: 700;
 }
@@ -241,12 +242,13 @@ textarea {
   flex-direction: row;
 }
 
-
-
-
-@keyframes gradient { 
-  0%{background-position:0 0}
-  100%{background-position:100% 0}
+@keyframes gradient {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
 }
 
 .webflow-style-input {
@@ -271,7 +273,15 @@ textarea {
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
     background-position: 0% 0%;
-    background: linear-gradient(to right, #B294FF, #57E6E6, #FEFFB8, #57E6E6, #B294FF, #57E6E6);
+    background: linear-gradient(
+      to right,
+      #b294ff,
+      #57e6e6,
+      #feffb8,
+      #57e6e6,
+      #b294ff,
+      #57e6e6
+    );
     background-size: 500% auto;
     animation: gradient 3s linear infinite;
   }
