@@ -4,9 +4,8 @@ import path from "path";
 import ip from "ip";
 import "reflect-metadata";
 import { AppDataSource } from "./data-source";
-import { initializeApp } from "./utils/init";
+import { initializeApp, refreshLoop } from "./utils/init";
 import { mainRouter } from "./routes/mainRouter";
-import { refreshStatuses } from "./utils/helpers";
 import fs from "fs";
 import { exit } from "process";
 
@@ -53,15 +52,8 @@ AppDataSource.initialize().then(async () => {
   });
 
   app.use(express.static(path.join(__dirname, '..', 'webshare-downloader-frontend', 'build')));
-
-  const refresh = async () => {
-    setTimeout(async () => {
-      await refreshStatuses()
-      refresh()
-    }, 4000)
-  }
   
-  refresh()
+  refreshLoop()
 
   app.listen(PORT, () => {
     console.log(`⚡️[server]: Server is running at ${PORT}`);

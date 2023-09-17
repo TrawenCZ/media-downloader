@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import ip from "ip";
 import express from "express";
 import cors from "cors";
+import { refreshStatuses } from "./helpers";
 
 
 
@@ -31,4 +31,12 @@ export const initializeApp = () => {
     app.use(cors());
 
     return app;
+}
+
+
+export const refreshLoop = async () => {
+  setTimeout(async () => {
+    await refreshStatuses()
+    refreshLoop()
+  }, 4000)
 }
