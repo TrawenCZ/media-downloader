@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import express from "express";
 import cors from "cors";
-import { refreshStatuses } from "./helpers";
+import { checkOutputPath, refreshStatuses } from "./helpers";
+import { FILE_OUTPUT_PATH } from "./constants";
 
 export const initializeApp = () => {
   const app = express();

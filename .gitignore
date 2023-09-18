@@ -7,3 +7,4 @@ temp/
 download_tests/
 database.sqlite
 src/storage/progressLogs/*
+.env

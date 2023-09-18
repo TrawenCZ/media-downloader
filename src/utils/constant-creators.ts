@@ -22,7 +22,7 @@ export const createFileOutputPath = () => {
     console.log(
       `Please create at least one directory in "${fileOutputPathRaw}" to store downloaded files.`
     );
-    exit(1);
+    return "";
   }
 
   return path.join(fileOutputPathRaw, fileOutputPathRawDirContent[0]);

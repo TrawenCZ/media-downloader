@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkPayload, syntetizeLogPath } from "../utils/helpers";
+import { checkOutputPath, checkPayload, syntetizeLogPath } from "../utils/helpers";
 import { AppDataSource } from "../data-source";
 import { DownloadEntry } from "../entity/DownloadEntry";
 import fs from "fs";
@@ -18,7 +18,7 @@ mainRouter.get("/downloads", async (req, res) => {
   res.send(await downloadRepository.find());
 });
 
-mainRouter.post("/now", async (req, res) => {
+mainRouter.post("/now", checkOutputPath, async (req, res) => {
   const link: string = req.body.link;
   const fileOriginalName = link.split("/").pop();
   const aliasName: string = req.body.aliasName || fileOriginalName;
@@ -80,7 +80,6 @@ mainRouter.post("/queue", async (req, res) => {
   try {
     execSync(`wget -q --spider "${link}"`, {
       stdio: "inherit",
-      cwd: FILE_OUTPUT_PATH,
     });
 
     fs.appendFileSync(QUEUE_FILE_PATH, `${link}"${aliasName}\n`, {
@@ -150,16 +149,6 @@ mainRouter.delete("/downloads/:fileId", async (req, res) => {
         )
       );
 
-      fs.unlinkSync(
-        path.join(
-          FILE_OUTPUT_PATH,
-          `${
-            fileToDelete.aliasName
-              ? fileToDelete.aliasName
-              : fileToDelete.fileName
-          }.mkv`
-        )
-      );
     } catch (error) {
       res
         .status(500)
@@ -174,7 +163,7 @@ mainRouter.delete("/downloads/:fileId", async (req, res) => {
   res.send("File deleted successfully");
 });
 
-mainRouter.post("/downloads/queue-start", async (req, res) => {
+mainRouter.post("/downloads/queue-start", checkOutputPath, async (req, res) => {
   const queueFileData = fs
     .readFileSync(QUEUE_FILE_PATH, "utf-8")
     .split("\n")

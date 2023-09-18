@@ -4,7 +4,8 @@ import fs from "fs";
 import { AppDataSource } from "../data-source";
 import { DownloadEntry } from "../entity/DownloadEntry";
 import { In, Not } from "typeorm";
-import { LOGS_DIR_PATH, QUEUE_FILE_PATH } from "./constants";
+import { FILE_OUTPUT_PATH, LOGS_DIR_PATH, QUEUE_FILE_PATH, setFileOutputPath } from "./constants";
+import { createFileOutputPath } from "./constant-creators";
 
 const downloadRepository = AppDataSource.getRepository(DownloadEntry);
 
@@ -104,3 +105,14 @@ export const checkPayload = (link, aliasName) => {
 export const syntetizeLogPath = (fileName) => {
   return path.join(LOGS_DIR_PATH, `${fileName}.log`);
 };
+
+
+export const checkOutputPath = (req, res, next) => {
+  const currentOutputPath = createFileOutputPath();
+  if (currentOutputPath === "") {
+    return;
+  }
+  setFileOutputPath(currentOutputPath);
+  
+  next();
+}

@@ -6,7 +6,10 @@ dotenv.config();
 
 export const QUEUE_FILE_PATH = createQueueFilePath();
 
-export const FILE_OUTPUT_PATH = createFileOutputPath();
+export var FILE_OUTPUT_PATH = createFileOutputPath();
+export const setFileOutputPath = (newPath: string) => {
+  FILE_OUTPUT_PATH = newPath;
+}
 
 export const LOGS_DIR_PATH = path.join(
   __dirname,
@@ -20,4 +23,3 @@ export const SPEEL_LIMIT_RATE = process.env.LIMIT_SPEED_RATE
   : "";
 
 export const PORT = process.env?.PORT || 3000;
-export const PYTHON_CMD = process.env?.PYTHON_CMD || "python";
