@@ -77,7 +77,7 @@ export default function LinksForm({ forcedFetch }: props) {
             style={{ height: "3rem" }}
             className={`${errors.aliasName ? "input-error" : ""}`}
             {...register("aliasName", {
-              required: true,
+              required: false,
               pattern: /^[^" \/]*$/,
             })}
             placeholder="Sem zadej jméno, pod jakým chceš soubor uložit (a zobrazit)"
