@@ -86,7 +86,7 @@ export default function LinksForm({ forcedFetch }: props) {
             <>
               <br />
               <span className="error">
-                Prosím vyplň toto pole. Název nesmí obsahovat znaky '"', '/' a
+                Název nesmí obsahovat znaky '"', '/' a
                 mezeru.
               </span>
             </>
